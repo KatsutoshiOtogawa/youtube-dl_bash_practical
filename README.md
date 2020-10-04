@@ -8,12 +8,19 @@ sudo apt install -y xsel
 echo "alias pbcopy='xsel --clipboard --input'" >> $HOME/.bash_profile
 echo "alias pbpaste='xsel --clipboard --output'" >> $HOME/.bash_profile
 
+# pythonからクリップボードの中身を操作するために
+# pyperclipをインストール
+pip3 install pyperclip
+
 # クリックボードからurlだけを処理。
-pbpaste | python3 << END | youtube-dl
+waittime=10
+python3 << END | sed '/^$/d' | xargs -n 1 -I {} bash -c "sleep $waittime && youtube-dl {}"
 # this pyhton script is filtering url.
 from urllib.parse import urlparse
 import sys
-for line in sys.stdin:
+import pyperclip
+
+for line in pyperclip.paste():
     url = line
     result = urlparse(url)
     # if url validate error, these valiables are empty.
@@ -28,7 +35,6 @@ waittime=10
 python3 << END | sed '/^$/d' | xargs -n 1 -I {} bash -c "sleep $waittime && youtube-dl {}"
 # this pyhton script is filtering url.
 from urllib.parse import urlparse
-import sys
 # list.txtがurlのリスト
 with open('list.txt') as f:
     for line in f.readlines():
