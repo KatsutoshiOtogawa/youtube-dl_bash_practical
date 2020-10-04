@@ -24,7 +24,8 @@ END
 
 ファイルから読み取る場合
 ```
-python3 << END | sed '/^$/d' | xargs -n 1 -I {} youtube-dl {}
+waittime=10
+python3 << END | sed '/^$/d' | xargs -n 1 -I {} bash -c "sleep $waittime && youtube-dl {}"
 # this pyhton script is filtering url.
 from urllib.parse import urlparse
 import sys
