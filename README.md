@@ -64,7 +64,7 @@ END
 
 ファイルから読み取る場合
 ```
-
+waittime=10
 node << END | xargs -n 1 -I {} bash -c "sleep $waittime && youtube-dl {}"
 const fs = require("fs");
 const readline = require("readline");
