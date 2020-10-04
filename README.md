@@ -24,16 +24,17 @@ END
 
 ファイルから読み取る場合
 ```
-# list.txtがurlのリスト
-cat list.txt | python3 << END | youtube-dl
+python3 << END | sed '/^$/d' | xargs -n 1 -I {} youtube-dl {}
 # this pyhton script is filtering url.
 from urllib.parse import urlparse
 import sys
-for line in sys.stdin:
-    url = line
-    result = urlparse(url)
-    # if url validate error, these valiables are empty.
-    if result.scheme != '' and  result.netloc != '':
-        print(url)
+# list.txtがurlのリスト
+with open('list.txt') as f:
+    for line in f.readlines():
+        url = line
+        result = urlparse(url)
+        # if url validate error, these valiables are empty.
+        if result.scheme != '' and  result.netloc != '':
+            print(url)
 END
 ```
