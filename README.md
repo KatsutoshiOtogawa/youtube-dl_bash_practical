@@ -17,9 +17,8 @@ waittime=10
 python3 << END | sed '/^$/d' | xargs -n 1 -I {} bash -c "sleep $waittime && youtube-dl {}"
 # this pyhton script is filtering url.
 from urllib.parse import urlparse
-import sys
 import pyperclip
-
+# クリップボードの中身を取得
 for line in pyperclip.paste():
     url = line
     result = urlparse(url)
