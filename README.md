@@ -1,6 +1,6 @@
 # youtube-dl_practical
 
-
+## pyhtonの場合
 ```
 # debian系の場合はあらかじめ下のコマンドのインストール、aliasの実行をしておくこと。
 # これを行うことによりmacと同じ感覚でクリップボード↔️標準入出力と操作できる様になります。
@@ -44,3 +44,51 @@ with open('list.txt') as f:
             print(url)
 END
 ```
+## nodejsの場合
+クリックボードからurlだけを処理する場合
+```
+# クリックボードからurlだけを処理。
+node << END
+const URL = require("url").URL;
+const url = 'https://www.example.com:777/a/b?c=d&e=f#g'
+  
+try {
+    new URL(url);
+    console.log(url);
+} catch (err) {
+    // URLインスタンス失敗の時はurlとしての形式が間違っているので出力しない。
+}
+
+END
+```
+
+ファイルから読み取る場合
+```
+
+node << END | xargs -n 1 -I {} bash -c "sleep $waittime && youtube-dl {}"
+const fs = require("fs");
+const readline = require("readline");
+const URL = require("url").URL;
+  
+const stream = fs.createReadStream("list.txt", {
+                  encoding: "utf8",         // 文字コード
+                  highWaterMark: 1024       // 一度に取得するbyte数
+             });
+
+const reader = readline.createInterface({ input: stream });
+
+reader.on("line", (row) => {
+
+    try {
+        new URL(row);
+        console.log(row);
+    } catch (err) {
+        // URLインスタンス失敗の時はurlとしての形式が間違っているので出力しない。
+    }
+});
+
+END
+```
+
+## 結論
+以外にもnodejsが一番書きやすいことがわかった。
