@@ -1,6 +1,6 @@
 # youtube-dl_practical
 
-## pyhtonの場合
+## pyhton
 ```
 # debian系の場合はあらかじめ下のコマンドのインストール、aliasの実行をしておくこと。
 # これを行うことによりmacと同じ感覚でクリップボード↔️標準入出力と操作できる様になります。
@@ -44,23 +44,7 @@ with open('list.txt') as f:
             print(url)
 END
 ```
-## nodejsの場合
-クリックボードからurlだけを処理する場合
-```
-# クリックボードからurlだけを処理。
-node << END
-const URL = require("url").URL;
-const url = 'https://www.example.com:777/a/b?c=d&e=f#g'
-  
-try {
-    new URL(url);
-    console.log(url);
-} catch (err) {
-    // URLインスタンス失敗の時はurlとしての形式が間違っているので出力しない。
-}
-
-END
-```
+## nodejs
 
 ファイルから読み取る場合
 ```
@@ -90,5 +74,24 @@ reader.on("line", (row) => {
 END
 ```
 
+## groovy
+ファイルから読み取る場合
+```
+# コマンドラインからヒアドキュメントで実行できる様になって欲しいな😇
+waittime=10
+groovy -e "
+new File('list.txt').eachLine('UTF-8') { 
+    try {
+    
+        new URL(it).openConnection().connect()
+        println(it)
+    } catch (MalformedURLException e) {
+            // the URL is not in a valid form. this
+    } catch (IOException e) {
+            // the connection couldn't be established
+    }
+}
+" | xargs -n 1 -I {} bash -c "sleep $waittime && youtube-dl {}"
+```
 ## 結論
-以外にもnodejsが一番書きやすいことがわかった。
+以外にもpythonが煩雑になり、groovyはネット上に例が少ないがシンプルで見やすくなかなか良い書き方。
